@@ -9,9 +9,11 @@ public class PigLatinConverter {
 
         for (String word : words){
             String punctuation = getPunctuation(word);
-            word = word.replaceAll("[^a-zA-Z]+", "");
+            word = word.replaceAll("[^a-zA-Z1-9]+", "");
             if (startsWithVowel(word)){
                 pigSentence += word + "ay" + punctuation + " ";
+            } else if (isANumber(word)){
+                pigSentence += word + punctuation + " ";
             } else {
                 pigSentence += swapConsonants(word) + punctuation + " ";
             }
@@ -26,10 +28,18 @@ public class PigLatinConverter {
      * @param text The input text to be checked
      * @return returns true if text starts with vowel, otherwise returns false
      */
-    public boolean startsWithVowel(String text){
+    private boolean startsWithVowel(String text){
         return text.matches("^[aeiouAEIOU].*");
     }
 
+    private boolean isANumber(String text){
+        try {
+            Double.parseDouble(text);
+            return true;
+        } catch (NumberFormatException e){
+            return false;
+        }
+    }
 
     /**
      * Swaps the consonants in a word according to Pig Latin rules
@@ -37,7 +47,7 @@ public class PigLatinConverter {
      * @param text The input text to be changed
      * @return returns the text with swapped consonants and added "ay" at the end
      */
-    public String swapConsonants(String text){
+    private String swapConsonants(String text){
         String beginning = text.replaceAll(".*?([aeiouAEIOU].*)", "$1");
         String end = text.replaceAll("([^aeiouAEIOU]*).*", "$1");
         return beginning + end + "ay";
@@ -48,7 +58,7 @@ public class PigLatinConverter {
      * @param text The input text to be changed
      * @return returns the same text it has received but capitalized
      */
-    public String capitalizeFirstLetter(String text){
+    private String capitalizeFirstLetter(String text){
         boolean newSentence = true;
         String result = "";
         String words[] = text.split(" ");
@@ -70,17 +80,16 @@ public class PigLatinConverter {
      * @param word The input word to be checked
      * @return returns true if the word ends with either question mark, exclamation mark or full stop
      */
-    public boolean isNewSentence(String word){
+    private boolean isNewSentence(String word){
         return word.matches(".*[.!?]+$");
     }
-
 
     /**
      * Retrieves the punctuation marks (.,?!) at the end of the text.
      * @param text The input text to be checked for punctuation
      * @return returns either the punctuation marks at the end of the text or an empty string
      */
-    public String getPunctuation(String text){
+    private String getPunctuation(String text){
         if (text.matches(".*[.,!?]+$")){
             return text.replaceAll(".*([.,!?]+$)", "$1");
         } else {
