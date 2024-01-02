@@ -3,6 +3,10 @@ package com.example.PigLatin.models;
 public class PigLatinConverter {
 
     public String convertToPigLatin(String text){
+        if (isEmpty(text)){
+            return "";
+        }
+
         text = text.toLowerCase();
         String[] words = text.split(" ");
         String pigSentence = "";
@@ -30,6 +34,10 @@ public class PigLatinConverter {
      */
     private boolean startsWithVowel(String text){
         return text.matches("^[aeiouAEIOU].*");
+    }
+
+    private boolean isEmpty(String text){
+        return text.equals("");
     }
 
     private boolean isANumber(String text){
